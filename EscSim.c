@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 
-typedef struct Escalonador{
+typedef struct Processo{
     int tempo;
     int prioridade;
     int id;
@@ -18,30 +18,44 @@ typedef struct Escalonador{
     int tempoFim;
     int tempoTotal;
     int tempoBloqueado
-} Escalonador;
+} Processo;
 
 typedef struct Fila{
-    Escalonador *escalonador;
+    Processo *data;
     struct Fila *prox;
 } Fila;
 
 Fila* criaLista(){
     Fila *novo = (Fila*)malloc(sizeof(Fila));
-    novo->escalonador = NULL;
+    novo->data = NULL;
     novo->prox = NULL;
     return novo;
 }
 
 int FilaVazia(Fila *fila){
-    return (fila->prox == NULL);
+    if (fila->prox == NULL){
+        return 1;
+    } else {
+        return 0;
+    }
 };
 
-void push(Fila *fila, Processo *processo) {
-    Fila prox -> processo;
-}
+void push(Fila *fila, Processo* processo) {
+    if (FilaVazia(fila) == 1){
+        Fila *novo = (Fila*)malloc(sizeof(Fila));
+        novo->data = processo;
+        novo->prox = NULL;
+    }
+        else{
+            Fila *novo = (Fila*)malloc(sizeof(Fila));
+            novo->data = processo;
+            novo->prox = fila-> prox;
+            fila->prox = novo;
+        }
+};
 
 
 int main (){
 
 
-}
+};
