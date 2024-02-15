@@ -1,11 +1,8 @@
-#ifndef HEADER_H
-#define HEADER_H
+#pragma once
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include "processo.h"
-#include "fila.h"
 
 #define QUANTUM 4
-
-#endif
