@@ -1,4 +1,4 @@
-#include "header.h"
+#include "../header.h"
 
 Processo* criarProcesso(int tempoCPU, int prioridade, int pid) {
     Processo *p = (Processo*) malloc(sizeof(Processo));
@@ -6,10 +6,12 @@ Processo* criarProcesso(int tempoCPU, int prioridade, int pid) {
     p->tempoCPU = tempoCPU;
     p->prioridade = prioridade;
     p->pid = pid;
+    p->estado = NOVO;
     p->tempoChegada = NULL;
     p->tempoExecucao = 0;
     p->tempoTermino = NULL;
     p->prox = NULL;
+    p->ant = NULL;
 
     return p;
 }
@@ -18,7 +20,17 @@ void liberarProcesso(Processo *p) {
     free(p);
 }
 
-Fila* criaLista() {
+void imprimirProcesso(Processo *p) {
+    printf("Tempo de CPU: %d", p->tempoCPU,
+           "Priodidade: %d", p->prioridade,
+           "PID: %d", p->pid,
+           "Estado: %d", p->estado,
+           "Tempo de chegada: %d", p->tempoChegada,
+           "Tempo de execucao: %d", p->tempoExecucao,
+           "Tempo de termino: %d", p->tempoTermino);
+}
+
+Fila* criaFila() {
     Fila *novo = (Fila*)malloc(sizeof(Fila));
     novo->head = NULL;
     novo->tail = NULL;
@@ -51,14 +63,20 @@ Processo* pop(Fila *fila) {
         fprintf(stderr, "Fila vazia!");
     }
     Processo *p = fila->head;
-
-    Processo *temp = fila->tail; 
-    while(temp->prox != fila->head) {
-        temp = temp->prox;
-    }
-    fila->head = temp;
+    fila->head = fila->head->ant;
+    fila->tam--;
 
     return p;
+}
+
+void imprimirFila(Fila *fila) {
+    Processo *p_atual = fila->head;
+
+    printf("FILA: ");
+    while(p_atual != NULL) {
+        printf("%d | ", p_atual->pid);
+        p_atual = p_atual->ant;
+    } printf("\n");
 }
 
 void liberarFila(Fila *fila) {
