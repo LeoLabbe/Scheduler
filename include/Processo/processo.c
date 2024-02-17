@@ -1,10 +1,14 @@
 #include "../header.h"
+#include "processo.h"
 
-Processo* criarProcesso(int tempoCPU, int prioridade, int pid) {
+Processo* criarProcesso(int pid, int tempoCPU, int tempoChegada ) {
     Processo *p = (Processo*) malloc(sizeof(Processo));
 
+
+
+
     p->tempoCPU = tempoCPU;
-    p->prioridade = prioridade;
+    p->prioridade = ALTA;
     p->pid = pid;
     p->estado = NOVO;
     p->tempoChegada = NULL;
@@ -21,14 +25,15 @@ void liberarProcesso(Processo *p) {
 }
 
 void imprimirProcesso(Processo *p) {
-    printf("Tempo de CPU: %d", p->tempoCPU,
-           "Priodidade: %d", p->prioridade,
-           "PID: %d", p->pid,
-           "Estado: %d", p->estado,
-           "Tempo de chegada: %d", p->tempoChegada,
-           "Tempo de execucao: %d", p->tempoExecucao,
-           "Tempo de termino: %d", p->tempoTermino);
+    printf("Tempo de CPU: %d\n", p->tempoCPU);
+    printf("Prioridade: %d\n", p->prioridade);
+    printf("PID: %d\n", p->pid);
+    printf("Estado: %d\n", p->estado);
+    printf("Tempo de chegada: %d\n", p->tempoChegada);
+    printf("Tempo de execucao: %d\n", p->tempoExecucao);
+    printf("Tempo de termino: %d\n", p->tempoTermino);
 }
+
 
 Fila* criaFila() {
     Fila *novo = (Fila*)malloc(sizeof(Fila));
@@ -47,26 +52,41 @@ int FilaVazia(Fila *fila) {
     }
 }
 
+void reset(Processo* process) {
+	
+	process -> prox = NULL;
+	process -> ant = NULL;
+}
 void push(Fila *fila, Processo* processo) {
+    if (fila->tam >= 10){
+        printf("Fila cheia");
+    }
+
     if (FilaVazia(fila) == 1) {
         fila->head = processo;
         fila->tail = processo;
     } else {
-        processo->prox = fila->tail;
+        processo->ant = fila->tail;
+        processo->prox = NULL;
+        fila->tail->prox = processo;
         fila->tail = processo;
     }
     fila->tam++;
 }
 
-Processo* pop(Fila *fila) {
+void pop(Fila *fila) {
     if(FilaVazia(fila) == 1) {
         fprintf(stderr, "Fila vazia!");
     }
     Processo *p = fila->head;
-    fila->head = fila->head->ant;
+    fila->head = fila->head->prox;
+    fila->head->ant = NULL;
+
+    reset(p);
+
     fila->tam--;
 
-    return p;
+    return;
 }
 
 void imprimirFila(Fila *fila) {
@@ -75,7 +95,7 @@ void imprimirFila(Fila *fila) {
     printf("FILA: ");
     while(p_atual != NULL) {
         printf("%d | ", p_atual->pid);
-        p_atual = p_atual->ant;
+        p_atual = p_atual->prox;
     } printf("\n");
 }
 
@@ -88,4 +108,12 @@ void liberarFila(Fila *fila) {
     }
 
     free(fila);
+}
+
+void trocaFila(Fila **antiga, Fila*nova) 
+{
+    Fila *copy;
+    copy = *antiga;   
+    push(nova, copy->tail);
+    pop(*antiga);
 }

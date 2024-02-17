@@ -15,6 +15,7 @@ typedef enum {
     BAIXA
 } Prioridade;
 
+
 typedef struct Processo{
     int tempoCPU;
     int prioridade;
@@ -41,8 +42,9 @@ void liberarProcesso(Processo *p);
 Fila* criaFila();
 int FilaVazia(Fila *fila);
 void push(Fila *fila, Processo* processo);
-Processo* pop(Fila *fila);
+void pop(Fila *fila);
 void imprimirFila(Fila *f);
 void liberarFila(Fila *fila);
+void trocaFila(Fila **antiga, Fila *nova);
 
 #endif
