@@ -1,5 +1,3 @@
-#ifndef PROCESSO_H
-#define PROCESSO_H
 #pragma once
 
 
@@ -25,6 +23,7 @@ typedef enum {
 } TipoES;
 
 typedef struct ProcessoES {
+    TipoES* tipoES;
 	int* tempoES;     
 	int totalES; 
 }ProcessoES;
@@ -38,9 +37,10 @@ typedef struct Processo{
     int tempoChegada;
     int tempoExecucao;
     int tempoTermino;
+    int tempoTerminoES;
     struct Processo *prox;
     struct Processo *ant;
-    ProcessoES Es;
+    ProcessoES* listaES;
 } Processo;
 
 typedef struct Fila{
@@ -49,7 +49,7 @@ typedef struct Fila{
     int tam;
 } Fila;
 
-Processo* criarProcesso(int tempoCPU, int prioridade, int pid);
+Processo* criarProcesso(int pid, int tempoCPU, int tempoChegada, TipoES* VES, int* TempoES, int nES);
 void imprimirProcesso(Processo *p);
 void liberarProcesso(Processo *p);
 
@@ -60,5 +60,3 @@ void pop(Fila *fila);
 void imprimirFila(const char* nome_fila, Fila *f);
 void liberarFila(Fila *fila);
 void trocaFila(Fila *antiga, Fila *nova);
-
-#endif

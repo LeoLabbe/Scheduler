@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include "processo.h"
-#include "processo.c"
+#include "./src/processo.c"
 
 #define QUANTUM 4
 #define MAX_PROCESS 10

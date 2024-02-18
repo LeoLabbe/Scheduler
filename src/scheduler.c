@@ -6,7 +6,17 @@
 #include <stdbool.h>
 #include "./include/processo.h"
 
+Filas* iniciaFilas(){
 
+	Filas* novasFilas = (Filas*) malloc(sizeof(Filas));
+
+	novasFilas->Alta = criaFila();
+	novasFilas->Baixa = criaFila();
+	novasFilas->ES = criaFila();
+	novasFilas->Terminados = criaFila();
+
+	return novasFilas;
+}
 
 int executaProcesso(Filas* Filas, int tempoExecucao){
 

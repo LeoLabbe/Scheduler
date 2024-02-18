@@ -1,20 +1,51 @@
 #include <stdio.h>
 #include "../include/header.h"
-#include "../include/processo.c"
+#include "processo.c"
 
 int main (){
 
 int i,n, id, tcpu, tchegada, nES, tES;
-Processo* Vprocesso[10];
-TipoES* VES[20];
+
+Fila* filaProcesso;
+Processo** Vprocesso;
+TipoES* VES;
+int* TempoES;
 TipoES tipo;
 
-Fila* alta = criaFila("ALTA");
-Fila* baixa = criaFila("BAIXA");
-Fila* ES = criaFila("ES");
+Vprocesso = (Processo**) malloc(sizeof(Processo*) * 3);
+VES = (TipoES*) malloc(sizeof(TipoES) * 2);
+TempoES = (int*) malloc(sizeof(int) * 2);
+
+VES[0] = DISCO;
+VES[1] = IMPRESSORA;
+
+TempoES[0] = 1;
+TempoES[1] = 3;
+
+
+Vprocesso[0] = criarProcesso(1, 10, 0, VES, TempoES, 2);
+Vprocesso[1] = criarProcesso(2, 10, 1, VES, TempoES, 2);
+Vprocesso[2] = criarProcesso(3, 10, 2, VES, TempoES, 2);
+
+filaProcesso = criaFila();
+
+push(filaProcesso, Vprocesso[0]);
+
+imprimirFila("Processos", filaProcesso);
 
 
 
+
+
+
+
+
+
+
+
+//ENTRADA E SAÍDA BASEADO NA PREFERENCIA DO USUARIO
+
+/*
 printf("Diga o numero de processos (MAX 10): ");
 scanf("%d", &n);
 
@@ -47,15 +78,9 @@ for (i = 0; i < n; i++) {
     }
 
 
-    Vprocesso[i] = criarProcesso(id, tcpu, tchegada);
-    push(alta, Vprocesso[i]);
-    imprimirFila("ALTA",alta);
-}
+    Vprocesso[i] = criarProcesso(id, tcpu, tchegada); */
+ 
 
-
-trocaFila(alta, baixa);
-
-imprimirFila("BAIXA",baixa);
 
 return 0;
 

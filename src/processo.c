@@ -1,10 +1,11 @@
 #pragma once
 
-#include "processo.h"
-#include "header.h"
+#include "./include/processo.h"
+#include "./include/header.h"
 
-Processo* criarProcesso(int pid, int tempoCPU, int tempoChegada ) {
+Processo* criarProcesso(int pid, int tempoCPU, int tempoChegada, TipoES* VES, int* TempoES, int nES) {
     Processo *p = (Processo*) malloc(sizeof(Processo));
+    ProcessoES* listaES;
 
     p->tempoCPU = tempoCPU;
     p->prioridade = ALTA;
@@ -16,6 +17,16 @@ Processo* criarProcesso(int pid, int tempoCPU, int tempoChegada ) {
     p->prox = NULL;
     p->ant = NULL;
 
+    p->listaES = (ProcessoES*) malloc(sizeof(ProcessoES));
+    listaES = p->listaES;
+    listaES->tipoES = (TipoES*) malloc(sizeof(TipoES) * nES);
+    listaES->tempoES = (int*) malloc(sizeof(int) * nES);
+
+    for(int i = 0; i < nES; i++) {
+		listaES -> tipoES[i] = VES[i];
+		listaES -> tempoES[i] = TempoES[i];
+	}
+	listaES -> totalES = nES;
     return p;
 }
 
@@ -34,7 +45,6 @@ void imprimirProcesso(Processo *p) {
 }
 
 
-void criaES();
 
 Fila* criaFila() {
     Fila *novo = (Fila*)malloc(sizeof(Fila));
@@ -54,10 +64,10 @@ int FilaVazia(Fila *fila) {
 }
 
 void reset(Processo* process) {
-	
 	process -> prox = NULL;
 	process -> ant = NULL;
 }
+
 void push(Fila *fila, Processo* processo) {
     if (fila->tam >= 10){
         printf("Fila cheia");
