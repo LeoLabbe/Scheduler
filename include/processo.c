@@ -1,17 +1,14 @@
-#include "../header.h"
 #include "processo.h"
+#include "header.h"
 
 Processo* criarProcesso(int pid, int tempoCPU, int tempoChegada ) {
     Processo *p = (Processo*) malloc(sizeof(Processo));
-
-
-
 
     p->tempoCPU = tempoCPU;
     p->prioridade = ALTA;
     p->pid = pid;
     p->estado = NOVO;
-    p->tempoChegada = NULL;
+    p->tempoChegada = tempoChegada;
     p->tempoExecucao = 0;
     p->tempoTermino = NULL;
     p->prox = NULL;
@@ -34,6 +31,8 @@ void imprimirProcesso(Processo *p) {
     printf("Tempo de termino: %d\n", p->tempoTermino);
 }
 
+
+void criaES();
 
 Fila* criaFila() {
     Fila *novo = (Fila*)malloc(sizeof(Fila));

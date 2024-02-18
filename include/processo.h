@@ -15,6 +15,11 @@ typedef enum {
     BAIXA
 } Prioridade;
 
+typedef enum {
+	DISCO,
+	FITA,
+	IMPRESSORA
+} TipoES;
 
 typedef struct Processo{
     int tempoCPU;
@@ -28,6 +33,11 @@ typedef struct Processo{
     struct Processo *prox;
     struct Processo *ant;
 } Processo;
+
+typedef struct ProcessoES {
+	int* tempoES;     
+	int totalES; 
+}ProcessES;
 
 typedef struct Fila{
     Processo *head;
