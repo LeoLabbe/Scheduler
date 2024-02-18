@@ -1,6 +1,6 @@
 #include "../include/header.h"
-#include "../include/Processo/processo.h"
-#include "../include/Processo/processo.c"
+#include "./include/processo.h"
+#include "./include/processo.c"
 
 int main (){
 

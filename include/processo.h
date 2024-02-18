@@ -1,6 +1,6 @@
 #ifndef PROCESSO_H
 #define PROCESSO_H
-#include "../header.h"
+#include "header.h"
 
 typedef enum {
     NOVO,

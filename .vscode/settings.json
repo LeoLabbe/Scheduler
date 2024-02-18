@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "stdlib.h": "c",
-        "header.h": "c"
+        "header.h": "c",
+        "processo.h": "c"
     }
 }
