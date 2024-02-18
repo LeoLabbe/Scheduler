@@ -1,3 +1,5 @@
+#pragma once
+
 #include "processo.h"
 #include "header.h"
 
@@ -88,10 +90,12 @@ void pop(Fila *fila) {
     return;
 }
 
-void imprimirFila(Fila *fila) {
-    Processo *p_atual = fila->head;
 
-    printf("FILA: ");
+void imprimirFila(const char* nome_fila,Fila *fila) {
+    Processo *p_atual = fila->head;
+    
+
+    printf("FILA %s:", nome_fila);
     while(p_atual != NULL) {
         printf("%d | ", p_atual->pid);
         p_atual = p_atual->prox;
@@ -109,10 +113,8 @@ void liberarFila(Fila *fila) {
     free(fila);
 }
 
-void trocaFila(Fila **antiga, Fila*nova) 
+void trocaFila(Fila *antiga, Fila*nova) 
 {
-    Fila *copy;
-    copy = *antiga;   
-    push(nova, copy->tail);
-    pop(*antiga);
+    push(nova, antiga->tail);
+    pop(antiga);
 }

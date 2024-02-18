@@ -1,5 +1,8 @@
 #ifndef PROCESSO_H
 #define PROCESSO_H
+#pragma once
+
+
 #include "header.h"
 
 typedef enum {
@@ -21,23 +24,24 @@ typedef enum {
 	IMPRESSORA
 } TipoES;
 
+typedef struct ProcessoES {
+	int* tempoES;     
+	int totalES; 
+}ProcessoES;
+
 typedef struct Processo{
+    int pid;
     int tempoCPU;
-    int prioridade;
-    int pid; 
+    Prioridade prioridade; 
     int ppid;
-    int estado;
+    Estados estado;
     int tempoChegada;
     int tempoExecucao;
     int tempoTermino;
     struct Processo *prox;
     struct Processo *ant;
+    ProcessoES Es;
 } Processo;
-
-typedef struct ProcessoES {
-	int* tempoES;     
-	int totalES; 
-}ProcessES;
 
 typedef struct Fila{
     Processo *head;
@@ -53,8 +57,8 @@ Fila* criaFila();
 int FilaVazia(Fila *fila);
 void push(Fila *fila, Processo* processo);
 void pop(Fila *fila);
-void imprimirFila(Fila *f);
+void imprimirFila(const char* nome_fila, Fila *f);
 void liberarFila(Fila *fila);
-void trocaFila(Fila **antiga, Fila *nova);
+void trocaFila(Fila *antiga, Fila *nova);
 
 #endif

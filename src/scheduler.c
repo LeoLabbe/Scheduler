@@ -1,15 +1,19 @@
+#pragma once
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include "./include/processo.h"
 
+
+
 int executaProcesso(Filas* Filas, int tempoExecucao){
 
 int tempExecAtual = 0;
 Fila* alta = Filas->Alta;
 Fila* baixa = Filas->Baixa;
-bool prioridadeAlta, transferida;
+bool prioridadeAlta, transferido;
 Processo* ProcessoExec;
 
 if(alta->tam){
@@ -22,13 +26,10 @@ if(alta->tam){
 ProcessoExec->estado = EXECUTANDO;
 
 for(int i = 0; i < QUANTUM; i++) {
-		transfered = transferFinishOrIO(queues, processToExec);
+		transferido = TerminadoOuES(Filas, ProcessoExec);
 
-		if(transfered) {
+		if(transferido) {
 			// Write process info if it reached the end of it's life
-			writeProcessInfo(queues -> buffer, 
-							 processToExec, 
-							 executionTime + currCpuTime);
 			
 			break;
 		}
@@ -36,5 +37,7 @@ for(int i = 0; i < QUANTUM; i++) {
 		// Updates IO queue in real time
 		ProcessoExec -> tempoExecucao++;
 		tempExecAtual++;
+
+}
 
 };
