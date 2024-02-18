@@ -4,9 +4,10 @@
 
 int main (){
 
-int i,n, id, tcpu, tchegada;
+int i,n, id, tcpu, tchegada, nES, tES;
 Processo* Vprocesso[10];
-
+TipoES* VES[20];
+TipoES tipo;
 
 Fila* alta = criaFila();
 Fila* baixa = criaFila();
@@ -30,6 +31,21 @@ for (i = 0; i < n; i++) {
 
     printf("Tempo de chegada: ");
     scanf("%d", &tchegada);
+
+    prinf("Digite numero de operacoes de E/S (se nenhuma, digite 0):");
+    scanf("%d", &nES);
+
+    if(nES > 0){
+
+        for(int j = 0; j<nES; j++)
+        printf("Digite o tipo da E/S %d assim -> DISCO, FITA OU IMPRESSORA:", j + 1);
+        scanf("%s", &tipo);
+
+        printf("Digite o tempo de chegada dessa E/S:");
+        scanf("%d", &tchegada);
+
+    }
+
 
     Vprocesso[i] = criarProcesso(id, tcpu, tchegada);
     push(alta, Vprocesso[i]);
