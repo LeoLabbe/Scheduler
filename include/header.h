@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include "processo.h"
-#include "./src/processo.c"
+
 
 #define QUANTUM 4
 #define MAX_PROCESS 10
@@ -22,3 +22,5 @@ typedef struct filas {
 
 
 int executaProcesso(Filas* Fila, int tempoExecucao);
+int getQuantRestanteProcessos(Filas* filas, Fila* Processos);
+Filas* iniciaFilas();

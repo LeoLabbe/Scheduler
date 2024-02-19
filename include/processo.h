@@ -36,8 +36,10 @@ typedef struct Processo{
     Estados estado;
     int tempoChegada;
     int tempoExecucao;
+    int tempoAteExec;
     int tempoTermino;
     int tempoTerminoES;
+    int esTerminado;
     struct Processo *prox;
     struct Processo *ant;
     ProcessoES* listaES;

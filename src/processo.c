@@ -1,7 +1,6 @@
-#pragma once
 
-#include "./include/processo.h"
-#include "./include/header.h"
+#include "../include/processo.h"
+#include "../include/header.h"
 
 Processo* criarProcesso(int pid, int tempoCPU, int tempoChegada, TipoES* VES, int* TempoES, int nES) {
     Processo *p = (Processo*) malloc(sizeof(Processo));
@@ -14,6 +13,7 @@ Processo* criarProcesso(int pid, int tempoCPU, int tempoChegada, TipoES* VES, in
     p->tempoChegada = tempoChegada;
     p->tempoExecucao = 0;
     p->tempoTermino = NULL;
+    p->esTerminado = 0;
     p->prox = NULL;
     p->ant = NULL;
 
