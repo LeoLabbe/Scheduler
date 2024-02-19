@@ -1,6 +1,5 @@
 #include "../include/processo.h"
 #include "../include/header.h"
-#include "scheduler.c"
 
 Processo* criarProcesso(int pid, int tempoCPU, int tempoChegada, TipoES* VES, int* TempoES, int nES) {
     Processo *p = (Processo*) malloc(sizeof(Processo));
