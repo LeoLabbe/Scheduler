@@ -1,11 +1,81 @@
-#pragma once
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include "../include/processo.h"
+#include "../include/header.h"
+#include "processo.c"
 
+void roundRobin(Fila* processos){
+
+	int tempExecAtual = 0;
+
+	Filas* filas = iniciaFilas();
+
+	while(getQuantRestanteProcessos(filas, processos) > 0){
+		if(processos -> tam > 0){
+			checaChegadaDeProcesso(processos, filas, tempExecAtual);
+
+			tempExecAtual += executaProcesso(filas, tempExecAtual);
+		}
+	}
+
+};
+
+	
+int executaProcesso(Filas* Filas, int tempoExecucao){
+
+	int tempoExecAtual = 0;
+	Fila* alta = Filas->Alta;
+	Fila* baixa = Filas->Baixa;
+	bool prioridadeAlta, transferido;
+	Processo* ProcessoExec;
+
+	if(alta->tam){
+	    ProcessoExec = alta->head;
+	    prioridadeAlta = true;
+	}else if (baixa->tam){
+	    ProcessoExec = baixa->head;
+	}
+	else{
+		atualizaES(Filas, tempoExecucao);
+		return 1;
+	}
+
+
+	
+	ProcessoExec->estado = EXECUTANDO;
+
+	for(int i = 0; i < QUANTUM; i++) {
+		transferido = trocaTerminadoOuES(Filas, ProcessoExec);
+
+		if(transferido) {
+			printf("O Processo com id: %d acabou...", ProcessoExec->pid);
+		break;
+		}
+	    ProcessoExec -> tempoExecucao++;
+		tempoExecAtual++;
+		atualizaES(Filas, tempoExecucao + tempoExecAtual);
+
+		imprimirFila("ALTA PRIORIDADE:", Filas ->Alta );
+		imprimirFila("BAIXA PRIORIDADE:", Filas ->Alta );
+		imprimirFila("E/S:", Filas ->Alta );
+		imprimirFila("TERMINADOS:", Filas ->Alta );
+}
+
+
+	if(prioridadeAlta){
+		ProcessoExec -> prioridade = BAIXA;
+		trocaFila(alta, baixa);
+	}
+	else 
+		trocaFila(baixa, baixa);
+
+	ProcessoExec ->estado = PRONTO;
+
+	return tempoExecAtual;
+
+}
 
 
 
@@ -143,13 +213,13 @@ void trocaESparaExec(Filas* filas, int pid){
 			switch (tipoES[esTerminado]){
 				case DISCO:
 				aux ->prioridade = BAIXA;
-				troca(ES,baixa);
+				trocaFila(ES,baixa);
 			break;
 
 				case FITA:
 				case IMPRESSORA:
 				aux ->prioridade = ALTA;
-				troca(ES,alta);
+				trocaFila(ES,alta);
 			break;
 			}
 
@@ -169,27 +239,35 @@ bool trocaTerminadoOuES(Filas* filas, Processo* processoParaExec){
 	Fila* ES = filas -> ES;
 	Fila* terminados = filas ->Terminados;
 	bool prioridadeAlta = processoParaExec -> prioridade == ALTA;
-	int pid = processoParaExec -> pid;
 
 	if(checaFim(processoParaExec)){
 
 		processoParaExec ->estado = TERMINADO;
 
-		if(prioridadeAlta)
+		if(prioridadeAlta){
 			trocaFila(alta,terminados);
+			printf("O processo %d terminou!\n", processoParaExec->pid);
+		}
+		
 		else
+		{
 			trocaFila(baixa,terminados);
+			printf("O processo %d terminou!\n", processoParaExec->pid);
+		}
 
 		return true;
 	}
 
 
 	if(checaEntradaES(processoParaExec)){
-		if(prioridadeAlta)
+		if(prioridadeAlta){
 			trocaFila(alta,ES);
-		else
+			printf("O processo %d solicitou E/S\n", processoParaExec->pid);
+		}
+		else{
 			trocaFila(baixa,ES);
-
+			printf("O processo %d solicitou E/S\n", processoParaExec->pid);
+		}
 	return true;
 	}
 
@@ -209,36 +287,3 @@ int getQuantRestanteProcessos(Filas* filas, Fila* Processos) {
 }
 
 
-int executaProcesso(Filas* Filas, int tempoExecucao){
-
-	int tempExecAtual = 0;
-	Fila* alta = Filas->Alta;
-	Fila* baixa = Filas->Baixa;
-	bool prioridadeAlta, transferido;
-	Processo* ProcessoExec;
-
-	if(alta->tam){
-	    ProcessoExec = alta->head;
-	    prioridadeAlta = true;
-	}else if (baixa->tam){
-	    ProcessoExec = baixa->head;
-	}
-
-ProcessoExec->estado = EXECUTANDO;
-
-for(int i = 0; i < QUANTUM; i++) {
-		transferido = TerminadoOuES(Filas, ProcessoExec);
-
-		if(transferido) {
-			// Write process info if it reached the end of it's life
-			
-			break;
-		}
-	    
-		// Updates IO queue in real time
-		ProcessoExec -> tempoExecucao++;
-		tempExecAtual++;
-
-}
-
-};

@@ -1,16 +1,19 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <stdbool.h>
 #include "../include/header.h"
+#include "../include/processo.h"
 #include "processo.c"
+#include "scheduler.c"
 
 int main (){
 
-int i,n, id, tcpu, tchegada, nES, tES;
 
 Fila* filaProcesso;
 Processo** Vprocesso;
 TipoES* VES;
 int* TempoES;
-TipoES tipo;
 
 Vprocesso = (Processo**) malloc(sizeof(Processo*) * 3);
 VES = (TipoES*) malloc(sizeof(TipoES) * 2);
@@ -29,9 +32,7 @@ Vprocesso[2] = criarProcesso(3, 10, 2, VES, TempoES, 2);
 
 filaProcesso = criaFila();
 
-push(filaProcesso, Vprocesso[0]);
-push(filaProcesso, Vprocesso[1]);
-push(filaProcesso, Vprocesso[2]);
+roundRobin(filaProcesso);
 
 imprimirFila("Processos", filaProcesso);
 
@@ -46,8 +47,11 @@ imprimirFila("Processos", filaProcesso);
 
 
 //ENTRADA E SAÍDA BASEADO NA PREFERENCIA DO USUARIO
+//LÓGICA AINDA INCOMPLETA
 
 /*
+
+int i,n, id, tcpu, tchegada, nES, tES;
 printf("Diga o numero de processos (MAX 10): ");
 scanf("%d", &n);
 

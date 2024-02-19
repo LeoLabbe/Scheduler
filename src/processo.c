@@ -1,6 +1,6 @@
-
 #include "../include/processo.h"
 #include "../include/header.h"
+#include "scheduler.c"
 
 Processo* criarProcesso(int pid, int tempoCPU, int tempoChegada, TipoES* VES, int* TempoES, int nES) {
     Processo *p = (Processo*) malloc(sizeof(Processo));
@@ -35,9 +35,10 @@ void liberarProcesso(Processo *p) {
 }
 
 void imprimirProcesso(Processo *p) {
+
+    printf("PID: %d\n", p->pid);
     printf("Tempo de CPU: %d\n", p->tempoCPU);
     printf("Prioridade: %d\n", p->prioridade);
-    printf("PID: %d\n", p->pid);
     printf("Estado: %d\n", p->estado);
     printf("Tempo de chegada: %d\n", p->tempoChegada);
     printf("Tempo de execucao: %d\n", p->tempoExecucao);

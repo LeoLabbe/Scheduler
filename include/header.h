@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <stdbool.h>
 #include "processo.h"
 
 
@@ -21,6 +22,17 @@ typedef struct filas {
 }Filas;
 
 
+void roundRobin(Fila* processos);
 int executaProcesso(Filas* Fila, int tempoExecucao);
 int getQuantRestanteProcessos(Filas* filas, Fila* Processos);
 Filas* iniciaFilas();
+void checaChegadaDeProcesso(Fila* processos ,Filas* filas, int tempoExecucao);
+bool getProcessoparaExec(Filas* filas, Processo** processoExec);
+bool checaEntradaES(Processo* processoExec);
+void trocaParaES(Fila* fila, Fila* ES);
+void atualizaES(Filas* filas, int tempExecAtual);
+void trocaESparaExec(Filas* filas, int pid);
+bool trocaTerminadoOuES(Filas* filas, Processo* processoParaExec);
+bool checaFim(Processo* processo);
+
+
