@@ -127,6 +127,6 @@ void liberarFila(Fila *fila) {
 
 void trocaFila(Fila *antiga, Fila*nova) 
 {
-    push(nova, antiga->tail);
+    push(nova, antiga->head);
     pop(antiga);
 }

@@ -37,7 +37,11 @@ int executaProcesso(Fila* processos, Filas* Filas, int tempoExecucao){
 	Processo* ProcessoExec = NULL;
 	int pid;
 
+	imprimirFila("Alta", alta);
+
 	prioridadeAlta = getProcessoparaExec(Filas, &ProcessoExec);
+
+	printf("");
 
 	if(!ProcessoExec){
 		checaChegadaDeProcesso(processos, Filas, tempoExecucao + 1);
