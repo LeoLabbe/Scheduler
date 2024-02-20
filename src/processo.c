@@ -1,3 +1,5 @@
+#pragma once
+
 #include "../include/processo.h"
 #include "../include/header.h"
 

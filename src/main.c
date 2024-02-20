@@ -32,6 +32,12 @@ Vprocesso[2] = criarProcesso(3, 10, 2, VES, TempoES, 2);
 
 filaProcesso = criaFila();
 
+push(filaProcesso, Vprocesso[0]);
+push(filaProcesso, Vprocesso[1]);
+push(filaProcesso, Vprocesso[2]);  
+
+imprimirFila("Processos", filaProcesso);
+
 roundRobin(filaProcesso);
 
 imprimirFila("Processos", filaProcesso);

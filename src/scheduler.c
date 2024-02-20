@@ -1,3 +1,4 @@
+#pragma once
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -9,61 +10,81 @@
 void roundRobin(Fila* processos){
 
 	int tempExecAtual = 0;
-
 	Filas* filas = iniciaFilas();
 
-	while(getQuantRestanteProcessos(filas, processos) > 0){
-		if(processos -> tam > 0){
-			checaChegadaDeProcesso(processos, filas, tempExecAtual);
+	checaChegadaDeProcesso(processos, filas, tempExecAtual);
 
-			tempExecAtual += executaProcesso(filas, tempExecAtual);
+	printf("Executando os processos...\n");
+
+	while(getQuantRestanteProcessos(filas, processos) > 0){
+		printf("Processos restantes: %d\n", getQuantRestanteProcessos(filas, processos));
+		if(processos -> tam > 0){
+			printf("Checando chegada de processos...\n");
+			checaChegadaDeProcesso(processos, filas, tempExecAtual);
+			tempExecAtual += executaProcesso(processos, filas, tempExecAtual);
 		}
 	}
 
 };
 
 	
-int executaProcesso(Filas* Filas, int tempoExecucao){
+int executaProcesso(Fila* processos, Filas* Filas, int tempoExecucao){
 
 	int tempoExecAtual = 0;
 	Fila* alta = Filas->Alta;
 	Fila* baixa = Filas->Baixa;
-	bool prioridadeAlta, transferido;
-	Processo* ProcessoExec;
+	bool prioridadeAlta = false, transferido = false;
+	Processo* ProcessoExec = NULL;
+	int pid;
 
-	if(alta->tam){
-	    ProcessoExec = alta->head;
-	    prioridadeAlta = true;
-	}else if (baixa->tam){
-	    ProcessoExec = baixa->head;
-	}
-	else{
+	prioridadeAlta = getProcessoparaExec(Filas, &ProcessoExec);
+
+	if(!ProcessoExec){
+		checaChegadaDeProcesso(processos, Filas, tempoExecucao + 1);
 		atualizaES(Filas, tempoExecucao);
-		return 1;
+
+		prioridadeAlta = getProcessoparaExec(Filas, &ProcessoExec);
+
+		if(!ProcessoExec){
+			return 1;
+		}
 	}
-
-
 	
+
 	ProcessoExec->estado = EXECUTANDO;
+	pid = ProcessoExec ->pid;
+
+	(printf("Executando o processo %d\n", pid));
 
 	for(int i = 0; i < QUANTUM; i++) {
+
+		printf("Tempo de execucao atual: %d\n", tempoExecAtual);	
+
 		transferido = trocaTerminadoOuES(Filas, ProcessoExec);
 
-		if(transferido) {
+		if(transferido){
 			printf("O Processo com id: %d acabou...", ProcessoExec->pid);
 		break;
 		}
+
+		// Atualiza o tempo
 	    ProcessoExec -> tempoExecucao++;
 		tempoExecAtual++;
-		atualizaES(Filas, tempoExecucao + tempoExecAtual);
 
-		imprimirFila("ALTA PRIORIDADE:", Filas ->Alta );
-		imprimirFila("BAIXA PRIORIDADE:", Filas ->Alta );
-		imprimirFila("E/S:", Filas ->Alta );
-		imprimirFila("TERMINADOS:", Filas ->Alta );
-}
+		if(processos -> tam > 0){
+			checaChegadaDeProcesso(processos, Filas, tempoExecucao + tempoExecAtual);
+			atualizaES(Filas, tempoExecucao + tempoExecAtual);
+		}
+	}
+		
+	transferido = trocaTerminadoOuES(Filas, ProcessoExec);
 
+	if(transferido) {
+		printf("O Processo com id: %d acabou...", ProcessoExec->pid);
+		return tempoExecAtual;
+	}
 
+	
 	if(prioridadeAlta){
 		ProcessoExec -> prioridade = BAIXA;
 		trocaFila(alta, baixa);
@@ -73,11 +94,11 @@ int executaProcesso(Filas* Filas, int tempoExecucao){
 
 	ProcessoExec ->estado = PRONTO;
 
+	printf("O processo %d foi transferido para a fila de prioridade %d\n", pid, ProcessoExec->prioridade);
+
 	return tempoExecAtual;
 
 }
-
-
 
 Filas* iniciaFilas(){
 
@@ -102,7 +123,7 @@ void checaChegadaDeProcesso(Fila* processos ,Filas* filas, int tempoExecucao){
 			temp = aux -> prox;
 			aux -> estado = PRONTO;
 			trocaFila(processos, filas->Alta);
-
+			printf("O processo %d chegou!\n", aux->pid);
 			aux = temp;
 			continue;
 		}
@@ -119,6 +140,7 @@ bool getProcessoparaExec(Filas* filas, Processo** processoExec){
 	Fila* alta = filas->Alta;
 	Fila* baixa = filas->Baixa;
 	bool filaAlta = false;
+
 	if(alta->tam){
 		*processoExec = alta->head;
 		filaAlta = true;
@@ -156,15 +178,15 @@ void trocaParaES(Fila* fila, Fila* ES){
 	switch (tipoES[esTerminado])
 	{
 	case DISCO:
-		processo ->tempoAteExec + DISCO_TEMPO;
+		processo ->tempoAteExec += DISCO_TEMPO;
 		break;
 
 	case FITA:
-		processo -> tempoAteExec + FITA_TEMPO;
+		processo -> tempoAteExec += FITA_TEMPO;
 		break;
 	
 	case IMPRESSORA:
-		processo -> tempoAteExec + IMPRESSORA_TEMPO;
+		processo -> tempoAteExec += IMPRESSORA_TEMPO;
 		break;
 	
 	}
@@ -173,24 +195,26 @@ void trocaParaES(Fila* fila, Fila* ES){
 }
 
 
-void atualizaES(Filas* filas, int tempExecAtual){
+void atualizaES(Filas* filas, int tempoExecAtual){
 	Fila* ES = filas ->ES;
 	Processo* aux = ES ->head;
+	bool transferido = false;
 
-	while (aux)
-	{
-		aux -> tempoAteExec--;
+	if(aux){
+		
+		if(aux -> tempoAteExec == 0){
+			trocaESparaExec(filas, aux ->pid);
 
-	if(aux ->tempoAteExec == 0){
-		trocaESparaExec(filas, aux ->pid);
-	}
+			transferido = true;
+		}
 
-	aux = aux -> prox;
-	}
+		if(!transferido){
+			aux -> tempoAteExec--;
+			aux = aux -> prox;
+		}
 	
-
-
-}
+			}
+	}
 
 void trocaESparaExec(Filas* filas, int pid){
 	Fila* alta = filas -> Alta;

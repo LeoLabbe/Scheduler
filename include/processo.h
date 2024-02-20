@@ -1,8 +1,6 @@
 #pragma once
 
 
-#include "header.h"
-
 typedef enum {
     NOVO,
     PRONTO,
@@ -51,14 +49,14 @@ typedef struct Fila{
     int tam;
 } Fila;
 
-Processo* criarProcesso(int pid, int tempoCPU, int tempoChegada, TipoES* VES, int* TempoES, int nES);
-void imprimirProcesso(Processo *p);
-void liberarProcesso(Processo *p);
+Processo* criarProcesso(int, int , int , TipoES* , int* , int );
+void imprimirProcesso(Processo *);
+void liberarProcesso(Processo *);
 
 Fila* criaFila();
-int FilaVazia(Fila *fila);
-void push(Fila *fila, Processo* processo);
-void pop(Fila *fila);
-void imprimirFila(const char* nome_fila, Fila *f);
-void liberarFila(Fila *fila);
-void trocaFila(Fila *antiga, Fila *nova);
+int FilaVazia(Fila *);
+void push(Fila *, Processo* );
+void pop(Fila *);
+void imprimirFila(const char* , Fila *);
+void liberarFila(Fila *);
+void trocaFila(Fila *, Fila *);

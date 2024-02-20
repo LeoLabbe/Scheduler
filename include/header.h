@@ -22,17 +22,17 @@ typedef struct filas {
 }Filas;
 
 
-void roundRobin(Fila* processos);
-int executaProcesso(Filas* Fila, int tempoExecucao);
-int getQuantRestanteProcessos(Filas* filas, Fila* Processos);
+int executaProcesso(Fila*, Filas*, int);
+void roundRobin(Fila*);
+int getQuantRestanteProcessos(Filas*, Fila*);
 Filas* iniciaFilas();
-void checaChegadaDeProcesso(Fila* processos ,Filas* filas, int tempoExecucao);
-bool getProcessoparaExec(Filas* filas, Processo** processoExec);
-bool checaEntradaES(Processo* processoExec);
-void trocaParaES(Fila* fila, Fila* ES);
-void atualizaES(Filas* filas, int tempExecAtual);
-void trocaESparaExec(Filas* filas, int pid);
-bool trocaTerminadoOuES(Filas* filas, Processo* processoParaExec);
-bool checaFim(Processo* processo);
+void checaChegadaDeProcesso(Fila*  ,Filas*, int);
+bool getProcessoparaExec(Filas* , Processo**);
+bool checaEntradaES(Processo* );
+void trocaParaES(Fila*, Fila* );
+void atualizaES(Filas* , int );
+void trocaESparaExec(Filas* , int );
+bool trocaTerminadoOuES(Filas*, Processo*);
+bool checaFim(Processo*);
 
 
